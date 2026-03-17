@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevHub | مجتمع نخبة المطورين</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --royal-black: #060606;
+            --gold-primary: #FFD700;
+            --gold-gradient: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+        }
+
+        body {
+            background-color: var(--royal-black);
+            color: white;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* توهج الخلفية (Ambient Cinema Glow) */
+        .bg-glow {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% -10%, #1a1a1a 0%, #060606 70%);
+            z-index: -1;
+        }
+
+        /* تأثير النص الذهبي المتدرج */
+        .gold-text {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        /* الأزرار الاحترافية */
+        .btn-gold {
+            background: var(--gold-gradient);
+            color: black;
+            font-weight: 800;
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.4);
+        }
+
+        .glass-premium {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        /* إطار الهاتف (يظهر فقط في الحاسوب) */
+        .phone-mockup {
+            border: 10px solid #151515;
+            border-radius: 50px;
+            box-shadow: 0 60px 120px rgba(0,0,0,0.9), 0 0 50px rgba(255, 215, 0, 0.05);
+            background: #0a0a0a;
+            position: relative;
+        }
+
+        /* نافذة الاختيار (Modal) */
+        #winModal.active { display: flex; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .modal-content {
+            transform: scale(0.9);
+            transition: 0.3s ease;
+        }
+        #winModal.active .modal-content { transform: scale(1); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="bg-glow"></div>
+
+    <nav class="flex justify-between items-center px-8 md:px-12 py-8 max-w-7xl mx-auto relative z-20">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-[#FFD700] rounded-2xl flex items-center justify-center shadow-[0_0_20px_rgba(255,215,0,0.3)]">
+                <i data-lucide="terminal" class="text-black w-7 h-7"></i>
+            </div>
+            <span class="text-3xl font-extrabold tracking-tighter">Dev<span class="gold-text">Hub</span></span>
+        </div>
+        <div class="hidden sm:block px-4 py-1.5 glass-premium border-gold/10">
+            <span class="text-[10px] font-mono text-gold tracking-widest uppercase">Elite Access Protocol</span>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-8 py-10 md:py-20 flex flex-col md:flex-row items-center gap-20 relative z-10">
+        
+        <div class="flex-1 text-center md:text-right">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-premium border-white/5 mb-10">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">v1.0 Decentralized Sync Active</span>
+            </div>
+            
+            <h1 class="text-5xl md:text-8xl font-black leading-[1.1] mb-10">
+                مجتمع <br> <span class="gold-text">نخبة المطورين</span>
+            </h1>
+            
+            <p class="text-gray-400 text-lg md:text-2xl mb-14 max-w-2xl mx-auto md:mx-0 leading-relaxed font-light">
+                أول منصة تشفيرية لمزامنة بيانات المطورين <span class="text-white font-mono">.db</span> 
+                مباشرة مع GitHub بمصداقية تقنية مطلقة.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-6 justify-center md:justify-start">
+                <a href="#" class="btn-gold px-12 py-6 rounded-2xl flex items-center justify-center gap-4 text-xl group">
+                    <i data-lucide="smartphone" class="group-hover:rotate-12 transition-transform"></i>
+                    التحميل للأندرويد
+                </a>
+                <button onclick="openWinModal()" class="glass-premium px-12 py-6 rounded-2xl flex items-center justify-center gap-4 text-white border-white/10 hover:bg-white/5 transition-all group">
+                    <i data-lucide="monitor" class="text-gold group-hover:scale-110 transition-transform"></i>
+                    التحميل للويندوز
+                </button>
+            </div>
+        </div>
+
+        <div class="hidden lg:block flex-1 relative">
+            <div class="absolute -inset-20 bg-gold/5 blur-[120px] rounded-full"></div>
+            <div class="phone-mockup w-[340px] h-[680px] mx-auto overflow-hidden">
+                <div class="p-10">
+                    <div class="flex justify-between items-center mb-16 opacity-20">
+                        <div class="w-12 h-1.5 bg-white rounded-full"></div>
+                        <div class="w-4 h-4 bg-white rounded-full"></div>
+                    </div>
+                    
+                    <div class="space-y-10">
+                        <div class="h-48 w-full glass-premium p-6 border-gold/10 flex flex-col justify-end">
+                            <div class="w-24 h-2 bg-gold/50 rounded-full mb-4"></div>
+                            <div class="w-full h-1.5 bg-white/5 rounded-full mb-2"></div>
+                            <div class="w-2/3 h-1.5 bg-white/5 rounded-full"></div>
+                        </div>
+
+                        <div class="flex flex-col items-center gap-8 pt-10">
+                            <div class="w-32 h-32 rounded-full border border-gold/20 flex items-center justify-center bg-gold/5 shadow-[0_0_40px_rgba(255,215,0,0.1)]">
+                                <i data-lucide="award" class="text-gold w-16 h-16"></i>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-gold font-bold text-sm tracking-[0.3em] uppercase">Elite Verified</p>
+                                <p class="text-gray-700 text-[10px] mt-2 font-mono">NODE_SYNC_STABLE</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="winModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-6 bg-black/90 backdrop-blur-xl">
+        <div class="modal-content glass-premium max-w-md w-full p-10 border-gold/20 relative">
+            <h3 class="text-3xl font-bold mb-3 text-center">نسخة <span class="gold-text">Windows</span></h3>
+            <p class="text-gray-500 text-center text-sm mb-10 leading-relaxed">يرجى اختيار إصدار النظام الخاص بك لتحميل النسخة المتوافقة.</p>
+
+            <div class="grid gap-5">
+                <a href="" class="flex items-center justify-between p-6 rounded-2xl bg-white/5 border border-white/5 hover:border-gold/40 hover:bg-white/10 transition-all group">
+                    <div class="flex items-center gap-5">
+                        <i data-lucide="layout-grid" class="text-gold w-8 h-8"></i>
+                        <div class="text-right">
+                            <p class="font-bold text-lg leading-none mb-1">Windows 11</p>
+                            <p class="text-[10px] text-gray-500 uppercase font-mono">Latest Build | x64-ARM</p>
+                        </div>
+                    </div>
+                    <i data-lucide="download" class="w-5 h-5 text-gray-700 group-hover:text-gold transition-all"></i>
+                </a>
+
+                <a href="" class="flex items-center justify-between p-6 rounded-2xl bg-white/5 border border-white/5 hover:border-gold/40 hover:bg-white/10 transition-all group">
+                    <div class="flex items-center gap-5">
+                        <i data-lucide="monitor" class="text-gray-400 group-hover:text-gold w-8 h-8 transition-colors"></i>
+                        <div class="text-right">
+                            <p class="font-bold text-lg leading-none mb-1">Windows 10</p>
+                            <p class="text-[10px] text-gray-500 uppercase font-mono">Enterprise | Legacy x64</p>
+                        </div>
+                    </div>
+                    <i data-lucide="download" class="w-5 h-5 text-gray-700 group-hover:text-gold transition-all"></i>
+                </a>
+            </div>
+
+            <button onclick="closeWinModal()" class="w-full mt-10 py-3 text-gray-600 hover:text-white text-xs font-bold uppercase tracking-widest transition-colors">
+                إغلاق النافذة
+            </button>
+        </div>
+    </div>
+
+    <footer class="py-20 border-t border-white/5 text-center relative z-10">
+        <p class="text-gray-600 text-[10px] font-bold tracking-[0.6em] uppercase">
+            Built for Elite Developers | Decentralized Identity © 2026
+        </p>
+    </footer>
+
+    <script>
+        // تفعيل الأيقونات
+        lucide.createIcons();
+
+        // دوال النافذة (Modal)
+        const modal = document.getElementById('winModal');
+
+        function openWinModal() {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // منع التمرير عند فتح النافذة
+        }
+
+        function closeWinModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // إغلاق عند الضغط خارج النافذة
+        window.onclick = function(event) {
+            if (event.target == modal) closeWinModal();
+        }
+    </script>
+</body>
+</html>
