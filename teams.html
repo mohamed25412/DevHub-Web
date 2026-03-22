@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevHub | فريق النخبة</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Noto+Kufi+Arabic:wght@400;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #FFD700; --dark: #020202; }
+        body { background: var(--dark); color: white; font-family: 'Noto Kufi Arabic', sans-serif; overflow-x: hidden; }
+        .gold-grad { background: linear-gradient(135deg, #FFD700, #B8860B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .member-card { background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.05); transition: 0.5s cubic-bezier(0.23, 1, 0.32, 1); }
+        .member-card:hover { transform: translateY(-15px); border-color: var(--gold); background: rgba(255,215,0,0.02); shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .avatar-glow { position: relative; }
+        .avatar-glow::after { content: ''; position: absolute; inset: -5px; border: 1px solid var(--gold); border-radius: 50%; opacity: 0; transition: 0.5s; }
+        .member-card:hover .avatar-glow::after { opacity: 0.5; transform: scale(1.1); }
+    </style>
+</head>
+<body>
+    <nav class="p-8 max-w-7xl mx-auto flex justify-between items-center">
+        <a href="index.html" class="font-black text-xl font-mono">DEV<span class="gold-grad">HUB</span></a>
+        <a href="index.html" class="text-[10px] font-bold uppercase tracking-widest opacity-50 hover:opacity-100">العودة للرئيسية</a>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 py-20">
+        <div class="text-center mb-32">
+            <h1 class="text-5xl lg:text-7xl font-black mb-8">العقول خلف <span class="gold-grad">النظام.</span></h1>
+            <p class="text-gray-500 max-w-2xl mx-auto">نحن مجموعة من المطورين المهووسين بالأمان والخصوصية، بنينا DevHub ليكون الأداة التي تمنينا وجودها دائماً.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-10">
+            <div class="member-card p-10 rounded-[3rem] text-center group">
+                <div class="w-32 h-32 mx-auto mb-8 avatar-glow">
+                    <div class="w-full h-full bg-gradient-to-tr from-gold to-transparent rounded-full flex items-center justify-center p-1">
+                        <div class="w-full h-full bg-black rounded-full flex items-center justify-center">
+                            <i data-lucide="code-2" class="w-12 h-12 text-gold"></i>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-black mb-2">!</h3>
+                <p class="text-gold text-[10px] font-bold tracking-widest uppercase mb-6">Lead Architect (Rust)</p>
+                <div class="flex justify-center gap-4 opacity-30 group-hover:opacity-100 transition-opacity">
+                    <i data-lucide="github" class="w-5 h-5 cursor-pointer"></i>
+                    <i data-lucide="twitter" class="w-5 h-5 cursor-pointer"></i>
+                </div>
+            </div>
+
+            <div class="member-card p-10 rounded-[3rem] text-center group">
+                <div class="w-32 h-32 mx-auto mb-8 avatar-glow">
+                    <div class="w-full h-full bg-gradient-to-tr from-gold to-transparent rounded-full flex items-center justify-center p-1">
+                        <div class="w-full h-full bg-black rounded-full flex items-center justify-center">
+                            <i data-lucide="shield-check" class="w-12 h-12 text-gold"></i>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-black mb-2">!</h3>
+                <p class="text-gold text-[10px] font-bold tracking-widest uppercase mb-6">Security Engineer</p>
+                <div class="flex justify-center gap-4 opacity-30 group-hover:opacity-100 transition-opacity">
+                    <i data-lucide="github" class="w-5 h-5 cursor-pointer"></i>
+                    <i data-lucide="linkedin" class="w-5 h-5 cursor-pointer"></i>
+                </div>
+            </div>
+
+            <div class="member-card p-10 rounded-[3rem] text-center group">
+                <div class="w-32 h-32 mx-auto mb-8 avatar-glow">
+                    <div class="w-full h-full bg-gradient-to-tr from-gold to-transparent rounded-full flex items-center justify-center p-1">
+                        <div class="w-full h-full bg-black rounded-full flex items-center justify-center">
+                            <i data-lucide="layout" class="w-12 h-12 text-gold"></i>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-black mb-2">!</h3>
+                <p class="text-gold text-[10px] font-bold tracking-widest uppercase mb-6">UI/UX Visionary</p>
+                <div class="flex justify-center gap-4 opacity-30 group-hover:opacity-100 transition-opacity">
+                    <i data-lucide="dribbble" class="w-5 h-5 cursor-pointer"></i>
+                    <i data-lucide="github" class="w-5 h-5 cursor-pointer"></i>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="relative mt-32 border-t border-white/5 bg-[#020202] pt-20 pb-10 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/50 to-transparent opacity-20"></div>
+        
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-20">
+                
+                <div class="col-span-2 lg:col-span-2 space-y-6">
+                    <a href="index.html" class="flex items-center gap-3 group">
+                        <div class="w-10 h-10 bg-gold rounded-xl flex items-center justify-center transition-transform group-hover:rotate-12">
+                            <i data-lucide="terminal" class="text-black w-6 h-6"></i>
+                        </div>
+                        <span class="text-2xl font-black font-mono tracking-tighter uppercase">Dev<span class="gold-grad text-[#FFD700]">Hub</span></span>
+                    </a>
+                    <p class="text-xs text-gray-500 leading-relaxed max-w-sm italic">
+                        أول بروتوكول مزامنة لا مركزي مشفر للمطورين. صُمم ليمنحك السيادة الكاملة على بياناتك البرمجية عبر نفق GitHub الآمن.
+                    </p>
+                    <div class="flex gap-4 opacity-40">
+                        <i data-lucide="github" class="w-5 h-5 hover:text-gold cursor-pointer transition-colors"></i>
+                        <i data-lucide="twitter" class="w-5 h-5 hover:text-gold cursor-pointer transition-colors"></i>
+                        <i data-lucide="discord" class="w-5 h-5 hover:text-gold cursor-pointer transition-colors"></i>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <h5 class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.3em]">المنتج</h5>
+                    <ul class="space-y-4 text-xs font-medium">
+                        <li><a href="index.html" class="text-gray-400 hover:text-gold transition-colors">الرئيسية</a></li>
+                        <li><a href="download.html" class="text-gray-400 hover:text-gold transition-colors">التحميل المباشر</a></li>
+                        <li><a href="status.html" class="flex items-center gap-2 text-gray-400 hover:text-gold transition-colors">
+                            حالة النظام 
+                            <span class="w-1.5 h-1.5 bg-yellow-500 rounded-full animate-pulse"></span>
+                        </a></li>
+                    </ul>
+                </div>
+
+                <div class="space-y-6">
+                    <h5 class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.3em]">الموارد</h5>
+                    <ul class="space-y-4 text-xs font-medium">
+                        <li><a href="docs.html" class="text-gray-400 hover:text-gold transition-colors">الوثائق التقنية</a></li>
+                        <li><a href="teams.html" class="text-gray-400 hover:text-gold transition-colors">فريق العمل</a></li>
+                        <li><a href="privacy.html" class="text-gray-400 hover:text-gold transition-colors">سياسة الخصوصية</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-right">
+                <div class="flex items-center gap-4 order-2 md:order-1">
+                    <p class="text-[9px] font-bold text-gray-700 tracking-widest uppercase">© 2026 DECENTRALIZED PROTOCOL. ALL RIGHTS RESERVED.</p>
+                </div>
+                
+                <div class="flex items-center gap-6 order-1 md:order-2">
+                    <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/5 border border-green-500/10">
+                        <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                        <span class="text-[8px] font-black text-green-500 uppercase tracking-tighter">Global Nodes: Online</span>
+                    </div>
+                    <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-gold/5 border border-gold/10">
+                        <span class="text-[8px] font-black text-gold uppercase tracking-tighter italic">Version 1.0.4-Stable</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        // أضف هذا الكود في نهاية الـ Script لكل صفحة
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', e => {
+                if (link.href.includes('.html')) {
+                    e.preventDefault();
+                    gsap.to("body", { opacity: 0, duration: 0.5, onComplete: () => {
+                        window.location.href = link.href;
+                    }});
+                }
+            });
+        });
+        // عند تحميل الصفحة
+        window.addEventListener('load', () => {
+            gsap.from("body", { opacity: 0, duration: 1 });
+        });
+    </script>
+</body>
+</html>

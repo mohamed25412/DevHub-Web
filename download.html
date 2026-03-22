@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DevHub | مركز التحميل العالمي</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Kufi+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --gold: #FFD700;
+            --dark: #020202;
+            --glass: rgba(255, 255, 255, 0.02);
+            --border: rgba(255, 215, 0, 0.1);
+        }
+
+        /* التصحيح البصري للهاتف والحاسوب */
+        body {
+            background-color: var(--dark);
+            color: #fff;
+            font-family: 'Noto Kufi Arabic', sans-serif;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .font-mono { font-family: 'Space Grotesk', sans-serif; }
+
+        /* الخلفية التفاعلية */
+        #bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: radial-gradient(circle at 50% -20%, #151510 0%, #020202 80%);
+        }
+
+        .grid-layer {
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(var(--border) 1px, transparent 1px);
+            background-size: 30px 30px;
+            mask-image: linear-gradient(to bottom, black, transparent);
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        /* تدرجات النخبة */
+        .gold-gradient {
+            background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* بطاقات التحميل: تكيف كامل */
+        .premium-card {
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--border);
+            border-radius: 2rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @media (min-width: 1024px) {
+            .premium-card:hover {
+                transform: translateY(-12px) scale(1.02);
+                border-color: rgba(255, 215, 0, 0.4);
+                box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+            }
+        }
+
+        /* تصميم الأزرار */
+        .btn-action {
+            width: 100%;
+            padding: 1.1rem;
+            border-radius: 1.25rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+            color: #000;
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.15);
+        }
+
+        .btn-outline {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        /* أنيميشن المزامنة */
+        .sync-bar {
+            width: 100%;
+            height: 3px;
+            background: rgba(255,215,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+
+        .sync-fill {
+            height: 100%;
+            background: var(--gold);
+            width: 30%;
+            box-shadow: 0 0 15px var(--gold);
+            animation: moveSync 2s infinite linear;
+        }
+
+        @keyframes moveSync {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(400%); }
+        }
+
+        /* تفاصيل الهاتف */
+        @media (max-width: 768px) {
+            .hero-text { font-size: 2.8rem !important; }
+            .nav-blur { backdrop-filter: blur(10px); background: rgba(0,0,0,0.5); }
+            .premium-card { padding: 1.5rem !important; border-radius: 1.5rem; }
+            .stat-grid { grid-template-columns: 1fr 1fr !important; gap: 1rem !important; }
+        }
+
+        /* المودال الشفاف */
+        #loader-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: rgba(0,0,0,0.98);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="bg-canvas"></div>
+    <div class="grid-layer"></div>
+
+    <nav class="fixed top-0 left-0 w-full z-[100] nav-blur border-b border-white/5">
+        <div class="max-w-[1400px] mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="text-xl font-black font-mono tracking-tighter uppercase">Dev<span class="gold-gradient">Hub</span></span>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <div class="hidden md:flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full border border-white/10">
+                    <div class="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
+                    <span class="text-[9px] font-bold opacity-70">SYSTEM_READY</span>
+                </div>
+                <a href="https://github.com" class="p-2 bg-white/5 rounded-full hover:bg-gold/20 transition-colors">
+                    <i data-lucide="github" class="w-5 h-5"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-[1400px] mx-auto px-6 pt-32 pb-20 relative z-10">
+        
+        <section class="mb-20 lg:mb-32 text-center lg:text-right">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/5 border border-gold/10 mb-8">
+                <i data-lucide="shield-check" class="w-3 h-3 text-gold"></i>
+                <span class="text-[10px] font-bold text-gold uppercase tracking-[0.2em]">End-to-End Encryption</span>
+            </div>
+            
+            <h1 class="hero-text text-5xl lg:text-8xl font-black leading-[1.1] mb-8 tracking-tighter">
+                بوابة التحميل <br> <span class="gold-gradient italic">للمطورين.</span>
+            </h1>
+            
+            <p class="text-gray-400 text-lg lg:text-2xl max-w-3xl mx-auto lg:mx-0 leading-relaxed font-light mb-12">
+                اختر نظام التشغيل الخاص بك وانضم إلى شبكة المزامنة اللامركزية الأكثر أماناً في العالم البرمجي.
+            </p>
+
+            <div class="stat-grid grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl">
+                <div class="p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-1">Downloads</p>
+                    <p class="text-2xl font-black font-mono gold-gradient">24.8K</p>
+                </div>
+                <div class="p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-1">Release</p>
+                    <p class="text-2xl font-black font-mono">1.0.4</p>
+                </div>
+                <div class="p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-1">Uptime</p>
+                    <p class="text-2xl font-black font-mono text-green-500">99.9%</p>
+                </div>
+                <div class="p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <p class="text-[9px] text-gray-500 uppercase font-bold tracking-widest mb-1">Users</p>
+                    <p class="text-2xl font-black font-mono">Elite</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-24">
+            
+            <div class="premium-card p-10 group relative overflow-hidden">
+                <div class="absolute -top-20 -left-20 w-40 h-40 bg-gold/5 blur-[80px] rounded-full"></div>
+                
+                <div class="flex justify-between items-center mb-12">
+                    <div class="w-16 h-16 bg-white/5 rounded-3xl flex items-center justify-center border border-white/10 group-hover:border-gold/30 transition-all">
+                        <i data-lucide="smartphone" class="w-8 h-8 text-gold"></i>
+                    </div>
+                    <span class="font-mono text-[10px] text-gray-600">MD5: B4...F9</span>
+                </div>
+
+                <h3 class="text-3xl font-black mb-4">Android <span class="text-gray-600">APK</span></h3>
+                <p class="text-gray-500 text-sm mb-10 leading-relaxed">يدعم إصدارات Android 10+ مع نظام المزامنة في الخلفية وتوفير الطاقة الذكي.</p>
+
+                <div class="space-y-4">
+                    <div class="sync-bar"><div class="sync-fill"></div></div>
+                    <button onclick="startDownload('Android')" class="btn-action btn-gold">
+                        <span>تحميل مباشر</span>
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </button>
+                    <div class="flex justify-between text-[9px] font-bold text-gray-600 uppercase pt-2">
+                        <span>Size: 42MB</span>
+                        <span>Arch: ARM64-v8a</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="premium-card p-10 group relative overflow-hidden">
+                <div class="absolute -top-20 -right-20 w-40 h-40 bg-white/5 blur-[80px] rounded-full"></div>
+
+                <div class="flex justify-between items-center mb-12">
+                    <div class="w-16 h-16 bg-white/5 rounded-3xl flex items-center justify-center border border-white/10 group-hover:border-gold/30 transition-all">
+                        <i data-lucide="monitor" class="w-8 h-8 text-white group-hover:text-gold transition-colors"></i>
+                    </div>
+                    <span class="font-mono text-[10px] text-gray-600">SHA-256 Verified</span>
+                </div>
+
+                <h3 class="text-3xl font-black mb-4">Windows <span class="text-gray-600">X64</span></h3>
+                <p class="text-gray-500 text-sm mb-10 leading-relaxed">نسخة سطح المكتب متوافقة مع Win 10/11 وتدعم الأوامر البرمجية المتقدمة CLI.</p>
+
+                <div class="space-y-4">
+                    <div class="sync-bar" style="animation-delay: 1s;"><div class="sync-fill" style="animation-delay: 1s;"></div></div>
+                    <button onclick="startDownload('Windows')" class="btn-action btn-outline">
+                        <span class="gold-gradient">تحميل للكمبيوتر</span>
+                        <i data-lucide="box" class="w-5 h-5 text-gold"></i>
+                    </button>
+                    <div class="flex justify-between text-[9px] font-bold text-gray-600 uppercase pt-2">
+                        <span>Size: 128MB</span>
+                        <span>Build: 2026.1</span>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="premium-card p-8 lg:p-16 border-gold/5 bg-gradient-to-br from-white/[0.02] to-transparent">
+            <h3 class="text-2xl font-black gold-gradient mb-12">بروتوكولات الأمان والمزامنة</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-gold/10 rounded-lg"><i data-lucide="lock" class="w-4 h-4 text-gold"></i></div>
+                        <h4 class="font-bold">Encryption AES-256</h4>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed">تشفير من طرف إلى طرف لبياناتك المحلية قبل وصولها إلى مستودعات GitHub الخاصة بك.</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-gold/10 rounded-lg"><i data-lucide="git-merge" class="w-4 h-4 text-gold"></i></div>
+                        <h4 class="font-bold">Smart Conflict Resolver</h4>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed">خوارزمية متطورة لحل تضارب البيانات في ملفات الـ SQLite عند المزامنة من أجهزة متعددة.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-gold/10 rounded-lg"><i data-lucide="zap" class="w-4 h-4 text-gold"></i></div>
+                        <h4 class="font-bold">Zero Latency Sync</h4>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed">استخدام بروتوكول Rust-based Core لضمان أسرع مزامنة ممكنة بأقل استهلاك للموارد.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="loader-overlay">
+        <div class="relative w-24 h-24 mb-10">
+            <div class="absolute inset-0 border-4 border-gold/10 rounded-full"></div>
+            <div id="loader-circle" class="absolute inset-0 border-4 border-gold rounded-full border-t-transparent animate-spin"></div>
+        </div>
+        <h2 id="loader-title" class="text-2xl font-black gold-gradient mb-2 uppercase italic tracking-widest">Initialising Tunnel</h2>
+        <p id="loader-status" class="text-[10px] font-mono text-gray-500 uppercase tracking-widest">Checking SHA-256 integrity...</p>
+        
+        <div class="w-full max-w-xs mt-10 p-4 border border-white/5 rounded-2xl bg-white/5">
+            <div class="flex justify-between text-[8px] font-mono text-gray-600 mb-2">
+                <span>BUFFER_STREAM</span>
+                <span id="loader-percent">0%</span>
+            </div>
+            <div class="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                <div id="loader-bar" class="h-full bg-gold w-0 transition-all duration-300 shadow-[0_0_15px_var(--gold)]"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="py-20 border-t border-white/5 text-center relative z-10">
+        <div class="flex justify-center gap-8 mb-8">
+            <i data-lucide="twitter" class="w-5 h-5 text-gray-700 hover:text-gold cursor-pointer"></i>
+            <i data-lucide="github" class="w-5 h-5 text-gray-700 hover:text-gold cursor-pointer"></i>
+            <i data-lucide="mail" class="w-5 h-5 text-gray-700 hover:text-gold cursor-pointer"></i>
+        </div>
+        <p class="text-[9px] font-bold text-gray-800 tracking-[1em] uppercase">Built for Elite Developers © 2026</p>
+    </footer>
+
+    <footer class="relative mt-32 border-t border-white/5 bg-[#020202] pt-20 pb-10 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/50 to-transparent opacity-20"></div>
+        
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-20">
+                
+                <div class="col-span-2 lg:col-span-2 space-y-6">
+                    <a href="index.html" class="flex items-center gap-3 group">
+                        <div class="w-10 h-10 bg-gold rounded-xl flex items-center justify-center transition-transform group-hover:rotate-12">
+                            <i data-lucide="terminal" class="text-black w-6 h-6"></i>
+                        </div>
+                        <span class="text-2xl font-black font-mono tracking-tighter uppercase">Dev<span class="gold-grad text-[#FFD700]">Hub</span></span>
+                    </a>
+                    <p class="text-xs text-gray-500 leading-relaxed max-w-sm italic">
+                        أول بروتوكول مزامنة لا مركزي مشفر للمطورين. صُمم ليمنحك السيادة الكاملة على بياناتك البرمجية عبر نفق GitHub الآمن.
+                    </p>
+                    <div class="flex gap-4 opacity-40">
+                        <i data-lucide="github" class="w-5 h-5 hover:text-gold cursor-pointer transition-colors"></i>
+                        <i data-lucide="twitter" class="w-5 h-5 hover:text-gold cursor-pointer transition-colors"></i>
+                        <i data-lucide="discord" class="w-5 h-5 hover:text-gold cursor-pointer transition-colors"></i>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <h5 class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.3em]">المنتج</h5>
+                    <ul class="space-y-4 text-xs font-medium">
+                        <li><a href="index.html" class="text-gray-400 hover:text-gold transition-colors">الرئيسية</a></li>
+                        <li><a href="download.html" class="text-gray-400 hover:text-gold transition-colors">التحميل المباشر</a></li>
+                        <li><a href="status.html" class="flex items-center gap-2 text-gray-400 hover:text-gold transition-colors">
+                            حالة النظام 
+                            <span class="w-1.5 h-1.5 bg-yellow-500 rounded-full animate-pulse"></span>
+                        </a></li>
+                    </ul>
+                </div>
+
+                <div class="space-y-6">
+                    <h5 class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.3em]">الموارد</h5>
+                    <ul class="space-y-4 text-xs font-medium">
+                        <li><a href="docs.html" class="text-gray-400 hover:text-gold transition-colors">الوثائق التقنية</a></li>
+                        <li><a href="teams.html" class="text-gray-400 hover:text-gold transition-colors">فريق العمل</a></li>
+                        <li><a href="privacy.html" class="text-gray-400 hover:text-gold transition-colors">سياسة الخصوصية</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-right">
+                <div class="flex items-center gap-4 order-2 md:order-1">
+                    <p class="text-[9px] font-bold text-gray-700 tracking-widest uppercase">© 2026 DECENTRALIZED PROTOCOL. ALL RIGHTS RESERVED.</p>
+                </div>
+                
+                <div class="flex items-center gap-6 order-1 md:order-2">
+                    <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/5 border border-green-500/10">
+                        <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                        <span class="text-[8px] font-black text-green-500 uppercase tracking-tighter">Global Nodes: Online</span>
+                    </div>
+                    <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-gold/5 border border-gold/10">
+                        <span class="text-[8px] font-black text-gold uppercase tracking-tighter italic">Version 1.0.4-Stable</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // تفعيل الأيقونات
+        lucide.createIcons();
+
+        // محاكي التحميل (التجربة الفاخرة)
+        function startDownload(platform) {
+            const overlay = document.getElementById('loader-overlay');
+            const bar = document.getElementById('loader-bar');
+            const status = document.getElementById('loader-status');
+            const percent = document.getElementById('loader-percent');
+            const title = document.getElementById('loader-title');
+
+            overlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+
+            let progress = 0;
+            const steps = [
+                "Allocating Secure Buffer...",
+                "Opening Encrypted Stream...",
+                "Verifying SHA-256 Signatures...",
+                "Handshaking with GitHub Node...",
+                "Ready to Receive Data..."
+            ];
+
+            const interval = setInterval(() => {
+                progress += Math.random() * 8;
+                if (progress > 100) progress = 100;
+
+                bar.style.width = progress + '%';
+                percent.innerText = Math.floor(progress) + '%';
+                
+                const stepIndex = Math.floor((progress / 100) * (steps.length - 1));
+                status.innerText = steps[stepIndex];
+
+                if (progress === 100) {
+                    clearInterval(interval);
+                    title.innerText = "STREAM_STARTING";
+                    status.innerText = "Redirecting to primary node...";
+                    
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                        progress = 0;
+                        bar.style.width = '0%';
+                        // تفعيل الرابط الحقيقي هنا:
+                        // window.location.href = platform === 'Android' ? 'app.apk' : 'setup.exe';
+                    }, 1200);
+                }
+            }, 250);
+        }
+
+        // تأثيرات GSAP عند التحميل
+        gsap.from(".premium-card", {
+            duration: 1.5,
+            y: 50,
+            opacity: 0,
+            stagger: 0.2,
+            ease: "expo.out"
+        });
+
+        // تأثير الماوس على الخلفية (للحاسوب فقط)
+        if (window.innerWidth > 1024) {
+            document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth - 0.5) * 20;
+                const y = (e.clientY / window.innerHeight - 0.5) * 20;
+                gsap.to(".grid-layer", { duration: 2, x: x, y: y });
+            });
+        }
+        // أضف هذا الكود في نهاية الـ Script لكل صفحة
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', e => {
+                if (link.href.includes('.html')) {
+                    e.preventDefault();
+                    gsap.to("body", { opacity: 0, duration: 0.5, onComplete: () => {
+                        window.location.href = link.href;
+                    }});
+                }
+            });
+        });
+        // عند تحميل الصفحة
+        window.addEventListener('load', () => {
+            gsap.from("body", { opacity: 0, duration: 1 });
+        });
+    </script>
+</body>
+</html>

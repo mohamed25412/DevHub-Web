@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevHub | حالة النظام والتحديثات</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Noto+Kufi+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root { --gold: #FFD700; --dark: #020202; --error: #ff4b4b; --success: #4ade80; }
+        body { background: var(--dark); color: white; font-family: 'Noto Kufi Arabic', sans-serif; overflow-x: hidden; }
+        .gold-grad { background: linear-gradient(135deg, #FFD700, #B8860B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* تأثير النبض للحالة */
+        .status-pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0; } 100% { transform: scale(1); opacity: 0; } }
+
+        /* خط الجدول الزمني */
+        .timeline-line { position: absolute; right: 20px; top: 0; bottom: 0; width: 1px; background: rgba(255,215,0,0.1); }
+        @media (min-width: 1024px) { .timeline-line { right: 50%; } }
+
+        .glass-card { background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="p-6 border-b border-white/5 flex justify-between items-center bg-black/50 sticky top-0 z-50 backdrop-blur-lg">
+        <a href="index.html" class="font-black font-mono flex items-center gap-2">
+            <i data-lucide="activity" class="text-gold w-5 h-5"></i>
+            DEV<span class="gold-grad">HUB OPS</span>
+        </a>
+        <div class="flex items-center gap-3">
+            <span class="text-[9px] font-bold opacity-50 uppercase tracking-tighter">System Time: 2026.03.22</span>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-6 py-16">
+        
+        <section class="mb-24">
+            <div class="glass-card p-8 rounded-[2.5rem] border-gold/10 relative overflow-hidden">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="relative flex h-3 w-3">
+                                <span class="status-pulse absolute inline-flex h-full w-full rounded-full bg-yellow-500 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-3 w-3 bg-yellow-600"></span>
+                            </span>
+                            <h2 class="text-xl font-black">حالة التحديث الجاري</h2>
+                        </div>
+                        <p class="text-sm text-gray-500 italic">نحن نقوم الآن بترقية بروتوكولات المزامنة اللامركزية.</p>
+                    </div>
+                    
+                    <div class="bg-black/40 px-6 py-4 rounded-2xl border border-white/5 text-center">
+                        <p class="text-[10px] text-gray-500 uppercase font-bold mb-1">موعد الانتهاء المتوقع</p>
+                        <p class="text-2xl font-mono font-bold text-gold tracking-widest">02:45:00 <span class="text-xs">Remaining</span></p>
+                    </div>
+                </div>
+
+                <div class="mt-8 p-4 bg-red-500/5 border border-red-500/20 rounded-xl flex items-center gap-4">
+                    <i data-lucide="alert-circle" class="text-red-500 w-5 h-5"></i>
+                    <p class="text-[11px] text-red-200/70">توقف مؤقت: ميزة "المزامنة الفورية" قد تواجه تأخيراً بسيطاً لمدة 15 دقيقة بسبب ضغط العقد (Nodes).</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-32">
+            <div class="text-center mb-16">
+                <h3 class="text-xs font-bold text-gold uppercase tracking-[0.4em] mb-4">The Future</h3>
+                <h2 class="text-4xl font-black">المميزات <span class="gold-grad italic">القادمة</span></h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="glass-card p-8 rounded-3xl border-white/5 group hover:border-gold/30 transition-all">
+                    <div class="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="box" class="text-gold w-5 h-5"></i>
+                    </div>
+                    <h4 class="text-lg font-black mb-3 italic">دعم قواعد البيانات NoSQL</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed italic">سنضيف قريباً إمكانية مزامنة ملفات MongoDB المحلية و JSON بضغطة زر واحدة.</p>
+                    <div class="mt-6 flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 bg-gold rounded-full"></span>
+                        <span class="text-[9px] font-bold opacity-40 uppercase">Q3 2026 Target</span>
+                    </div>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl border-white/5 group hover:border-gold/30 transition-all">
+                    <div class="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="fingerprint" class="text-gold w-5 h-5"></i>
+                    </div>
+                    <h4 class="text-lg font-black mb-3 italic">التشفير البيومتري للهاتف</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed italic">قفل تطبيق الهاتف عبر بصمة الإصبع أو الوجه لزيادة طبقة الأمان المحلية.</p>
+                    <div class="mt-6 flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                        <span class="text-[9px] font-bold opacity-40 uppercase">In Development</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 md:hidden">
+        <div class="bg-white/10 backdrop-blur-xl border border-white/20 px-6 py-3 rounded-full flex items-center gap-6 shadow-2xl">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
+                <span class="text-[10px] font-black uppercase">Syncing...</span>
+            </div>
+            <div class="w-[1px] h-4 bg-white/10"></div>
+            <a href="download.html" class="text-[10px] font-black text-gold uppercase">Download 1.0.4</a>
+        </div>
+    </div>
+
+    <footer class="relative mt-32 border-t border-white/5 bg-[#020202] pt-20 pb-10 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/50 to-transparent opacity-20"></div>
+        
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-20">
+                
+                <div class="col-span-2 lg:col-span-2 space-y-6">
+                    <a href="index.html" class="flex items-center gap-3 group">
+                        <div class="w-10 h-10 bg-gold rounded-xl flex items-center justify-center transition-transform group-hover:rotate-12">
+                            <i data-lucide="terminal" class="text-black w-6 h-6"></i>
+                        </div>
+                        <span class="text-2xl font-black font-mono tracking-tighter uppercase">Dev<span class="gold-grad text-[#FFD700]">Hub</span></span>
+                    </a>
+                    <p class="text-xs text-gray-500 leading-relaxed max-w-sm italic">
+                        أول بروتوكول مزامنة لا مركزي مشفر للمطورين. صُمم ليمنحك السيادة الكاملة على بياناتك البرمجية عبر نفق GitHub الآمن.
+                    </p>
+                    <div class="flex gap-4 opacity-40">
+                        <i data-lucide="github" class="w-5 h-5 hover:text-gold cursor-pointer transition-colors"></i>
+                        <i data-lucide="twitter" class="w-5 h-5 hover:text-gold cursor-pointer transition-colors"></i>
+                        <i data-lucide="discord" class="w-5 h-5 hover:text-gold cursor-pointer transition-colors"></i>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <h5 class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.3em]">المنتج</h5>
+                    <ul class="space-y-4 text-xs font-medium">
+                        <li><a href="index.html" class="text-gray-400 hover:text-gold transition-colors">الرئيسية</a></li>
+                        <li><a href="download.html" class="text-gray-400 hover:text-gold transition-colors">التحميل المباشر</a></li>
+                        <li><a href="status.html" class="flex items-center gap-2 text-gray-400 hover:text-gold transition-colors">
+                            حالة النظام 
+                            <span class="w-1.5 h-1.5 bg-yellow-500 rounded-full animate-pulse"></span>
+                        </a></li>
+                    </ul>
+                </div>
+
+                <div class="space-y-6">
+                    <h5 class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.3em]">الموارد</h5>
+                    <ul class="space-y-4 text-xs font-medium">
+                        <li><a href="docs.html" class="text-gray-400 hover:text-gold transition-colors">الوثائق التقنية</a></li>
+                        <li><a href="teams.html" class="text-gray-400 hover:text-gold transition-colors">فريق العمل</a></li>
+                        <li><a href="privacy.html" class="text-gray-400 hover:text-gold transition-colors">سياسة الخصوصية</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-right">
+                <div class="flex items-center gap-4 order-2 md:order-1">
+                    <p class="text-[9px] font-bold text-gray-700 tracking-widest uppercase">© 2026 DECENTRALIZED PROTOCOL. ALL RIGHTS RESERVED.</p>
+                </div>
+                
+                <div class="flex items-center gap-6 order-1 md:order-2">
+                    <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/5 border border-green-500/10">
+                        <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                        <span class="text-[8px] font-black text-green-500 uppercase tracking-tighter">Global Nodes: Online</span>
+                    </div>
+                    <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-gold/5 border border-gold/10">
+                        <span class="text-[8px] font-black text-gold uppercase tracking-tighter italic">Version 1.0.4-Stable</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        
+        // تحريك العناصر عند التمرير
+        gsap.from(".glass-card", {
+            duration: 1,
+            y: 30,
+            opacity: 0,
+            stagger: 0.2,
+            ease: "power2.out"
+        });
+    </script>
+</body>
+</html>

@@ -3,223 +3,406 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DevHub | مجتمع نخبة المطورين</title>
+    <title>DevHub | مستقبل المزامنة البرمجية</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Kufi+Arabic:wght@400;700;900&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --royal-black: #060606;
-            --gold-primary: #FFD700;
-            --gold-gradient: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+            --gold: #FFD700;
+            --dark-bg: #010101;
+            --accent: #B8860B;
+            --glass-bg: rgba(255, 255, 255, 0.02);
         }
 
         body {
-            background-color: var(--royal-black);
-            color: white;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            margin: 0;
+            background-color: var(--dark-bg);
+            color: #fff;
+            font-family: 'Noto Kufi Arabic', sans-serif;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        /* توهج الخلفية (Ambient Cinema Glow) */
-        .bg-glow {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% -10%, #1a1a1a 0%, #060606 70%);
+        .font-mono { font-family: 'Space Grotesk', sans-serif; }
+
+        /* تدرج الذهب الملكي */
+        .gold-grad {
+            background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* توهج النيون الذهبي */
+        .neon-glow {
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        /* خلفية الشبكة المتحركة */
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255, 215, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 215, 0, 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+            transform: perspective(500px) rotateX(60deg) translateY(-200px);
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        /* تأثير الزجاج الفاخر */
+        .premium-glass {
+            background: rgba(255, 255, 255, 0.01);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.4s;
+        }
+
+        .premium-glass:hover {
+            border-color: var(--gold);
+            background: rgba(255, 215, 0, 0.02);
+        }
+
+        /* الأزرار الرئيسية */
+        .btn-prime {
+            position: relative;
+            padding: 1.2rem 3rem;
+            border-radius: 1.5rem;
+            font-weight: 900;
+            overflow: hidden;
+            transition: 0.4s;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 1;
+        }
+
+        .btn-prime::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #FFD700, #B8860B);
+            transition: 0.4s;
             z-index: -1;
         }
 
-        /* تأثير النص الذهبي المتدرج */
-        .gold-text {
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
-        }
-
-        /* الأزرار الاحترافية */
-        .btn-gold {
-            background: var(--gold-gradient);
-            color: black;
-            font-weight: 800;
-            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .btn-gold:hover {
+        .btn-prime:hover {
             transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.4);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.3);
+            color: #000;
         }
 
-        .glass-premium {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            transition: all 0.3s ease;
+        /* انيميشن "تدفق البيانات" */
+        .data-flow {
+            width: 2px;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+            position: absolute;
+            animation: flowDown 3s infinite linear;
         }
 
-        /* إطار الهاتف (يظهر فقط في الحاسوب) */
-        .phone-mockup {
-            border: 10px solid #151515;
-            border-radius: 50px;
-            box-shadow: 0 60px 120px rgba(0,0,0,0.9), 0 0 50px rgba(255, 215, 0, 0.05);
-            background: #0a0a0a;
-            position: relative;
+        @keyframes flowDown {
+            0% { transform: translateY(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(400%); opacity: 0; }
         }
 
-        /* نافذة الاختيار (Modal) */
-        #winModal.active { display: flex; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .modal-content {
-            transform: scale(0.9);
-            transition: 0.3s ease;
+        /* للهاتف */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 3rem !important; }
+            .section-padding { padding-top: 5rem; padding-bottom: 5rem; }
         }
-        #winModal.active .modal-content { transform: scale(1); }
     </style>
 </head>
 <body class="antialiased">
 
-    <div class="bg-glow"></div>
-
-    <nav class="flex justify-between items-center px-8 md:px-12 py-8 max-w-7xl mx-auto relative z-20">
-        <div class="flex items-center gap-3">
-            <div class="w-12 h-12 bg-[#FFD700] rounded-2xl flex items-center justify-center shadow-[0_0_20px_rgba(255,215,0,0.3)]">
-                <i data-lucide="terminal" class="text-black w-7 h-7"></i>
-            </div>
-            <span class="text-3xl font-extrabold tracking-tighter">Dev<span class="gold-text">Hub</span></span>
-        </div>
-        <div class="hidden sm:block px-4 py-1.5 glass-premium border-gold/10">
-            <span class="text-[10px] font-mono text-gold tracking-widest uppercase">Elite Access Protocol</span>
-        </div>
-    </nav>
-
-    <main class="max-w-7xl mx-auto px-8 py-10 md:py-20 flex flex-col md:flex-row items-center gap-20 relative z-10">
+    <div class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+        <div class="hero-grid" id="grid"></div>
         
-        <div class="flex-1 text-center md:text-right">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-premium border-white/5 mb-10">
-                <span class="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
-                <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">v1.0 Decentralized Sync Active</span>
+        <div class="data-flow" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="data-flow" style="left: 30%; animation-delay: 1.5s;"></div>
+        <div class="data-flow" style="right: 20%; animation-delay: 0.8s;"></div>
+
+        <nav class="fixed top-0 w-full z-50 p-6 flex justify-between items-center max-w-7xl mx-auto">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl font-black font-mono tracking-tighter uppercase">Dev<span class="gold-grad">Hub</span></span>
+            </div>
+            <div class="hidden lg:flex gap-10 text-[10px] font-bold tracking-[0.3em] uppercase opacity-60">
+                <a href="#how" class="hover:text-gold transition-colors">Mechanism</a>
+                <a href="#features" class="hover:text-gold transition-colors">Features</a>
+                <a href="#security" class="hover:text-gold transition-colors">Security</a>
+            </div>
+            <a href="download.html" class="px-6 py-2 rounded-full border border-gold/30 text-[10px] font-bold uppercase hover:bg-gold hover:text-black transition-all">
+                Get Started
+            </a>
+        </nav>
+
+        <div class="relative z-10 text-center px-6 mt-20">
+            <div class="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/5 border border-white/10 mb-10 reveal">
+                <span class="w-2 h-2 bg-gold rounded-full animate-ping"></span>
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-80">v1.0 Decentralized Protocol Active</span>
             </div>
             
-            <h1 class="text-5xl md:text-8xl font-black leading-[1.1] mb-10">
-                مجتمع <br> <span class="gold-text">نخبة المطورين</span>
+            <h1 class="hero-title text-6xl lg:text-[10rem] font-black leading-none tracking-tighter mb-10 reveal">
+                تزامن <br> <span class="gold-grad italic">بلا حدود.</span>
             </h1>
             
-            <p class="text-gray-400 text-lg md:text-2xl mb-14 max-w-2xl mx-auto md:mx-0 leading-relaxed font-light">
-                أول منصة تشفيرية لمزامنة بيانات المطورين <span class="text-white font-mono">.db</span> 
-                مباشرة مع GitHub بمصداقية تقنية مطلقة.
+            <p class="text-gray-400 text-lg lg:text-3xl max-w-4xl mx-auto font-light leading-relaxed mb-16 reveal">
+                DevHub هو الجسر التكنولوجي الذي يربط قواعد بياناتك المحلية بمستودعات السحاب عبر تشفير عسكري، مصمم خصيصاً لمجتمع المطورين المحترفين.
             </p>
 
-            <div class="flex flex-col sm:flex-row gap-6 justify-center md:justify-start">
-                <a href="#" class="btn-gold px-12 py-6 rounded-2xl flex items-center justify-center gap-4 text-xl group">
-                    <i data-lucide="smartphone" class="group-hover:rotate-12 transition-transform"></i>
-                    التحميل للأندرويد
+            <div class="flex flex-col sm:flex-row gap-8 justify-center items-center reveal">
+                <a href="download.html" class="btn-prime text-black">
+                    <i data-lucide="zap" class="fill-current"></i>
+                    ابدأ تجربتك المجانية
                 </a>
-                <button onclick="openWinModal()" class="glass-premium px-12 py-6 rounded-2xl flex items-center justify-center gap-4 text-white border-white/10 hover:bg-white/5 transition-all group">
-                    <i data-lucide="monitor" class="text-gold group-hover:scale-110 transition-transform"></i>
-                    التحميل للويندوز
-                </button>
+                <a href="#how" class="flex items-center gap-3 text-gray-500 hover:text-white transition-colors group">
+                    <span>شاهد كيف يعمل</span>
+                    <i data-lucide="play-circle" class="group-hover:text-gold"></i>
+                </a>
             </div>
         </div>
 
-        <div class="hidden lg:block flex-1 relative">
-            <div class="absolute -inset-20 bg-gold/5 blur-[120px] rounded-full"></div>
-            <div class="phone-mockup w-[340px] h-[680px] mx-auto overflow-hidden">
-                <div class="p-10">
-                    <div class="flex justify-between items-center mb-16 opacity-20">
-                        <div class="w-12 h-1.5 bg-white rounded-full"></div>
-                        <div class="w-4 h-4 bg-white rounded-full"></div>
-                    </div>
-                    
-                    <div class="space-y-10">
-                        <div class="h-48 w-full glass-premium p-6 border-gold/10 flex flex-col justify-end">
-                            <div class="w-24 h-2 bg-gold/50 rounded-full mb-4"></div>
-                            <div class="w-full h-1.5 bg-white/5 rounded-full mb-2"></div>
-                            <div class="w-2/3 h-1.5 bg-white/5 rounded-full"></div>
-                        </div>
+        <div class="absolute bottom-10 animate-bounce opacity-20">
+            <i data-lucide="chevron-down" class="w-8 h-8"></i>
+        </div>
+    </div>
 
-                        <div class="flex flex-col items-center gap-8 pt-10">
-                            <div class="w-32 h-32 rounded-full border border-gold/20 flex items-center justify-center bg-gold/5 shadow-[0_0_40px_rgba(255,215,0,0.1)]">
-                                <i data-lucide="award" class="text-gold w-16 h-16"></i>
-                            </div>
-                            <div class="text-center">
-                                <p class="text-gold font-bold text-sm tracking-[0.3em] uppercase">Elite Verified</p>
-                                <p class="text-gray-700 text-[10px] mt-2 font-mono">NODE_SYNC_STABLE</p>
-                            </div>
+    <section id="how" class="py-32 lg:py-60 px-6 max-w-7xl mx-auto">
+        <div class="grid lg:grid-cols-2 gap-24 items-center">
+            <div class="space-y-12">
+                <h2 class="text-5xl lg:text-7xl font-black leading-tight">محرك المزامنة <br> <span class="gold-grad italic">الأذكى عالمياً.</span></h2>
+                <div class="space-y-10">
+                    <div class="flex gap-6 group">
+                        <div class="w-14 h-14 shrink-0 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-gold transition-all">
+                            <i data-lucide="database" class="text-gold"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-black mb-2">رصد تلقائي للبيانات</h4>
+                            <p class="text-gray-500 leading-relaxed">بمجرد إجراء أي تعديل على ملف الـ <code class="text-white">.db</code>، يقوم المحرك برصده فوراً وتجهيزه للتشفير.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-6 group">
+                        <div class="w-14 h-14 shrink-0 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-gold transition-all">
+                            <i data-lucide="lock" class="text-gold"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-black mb-2">تشفير XChaCha20</h4>
+                            <p class="text-gray-500 leading-relaxed">لا نرسل بياناتك أبداً كـ "نص واضح". كل بايت يتم تشفيره بمفتاح خاص لا يملكه إلا أنت.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-6 group">
+                        <div class="w-14 h-14 shrink-0 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-gold transition-all">
+                            <i data-lucide="git-branch" class="text-gold"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-black mb-2">GitHub Native Sync</h4>
+                            <p class="text-gray-500 leading-relaxed">يتم دفع البيانات المشفرة إلى مستودع خاص بك، مما يضمن لك السيادة الكاملة على بياناتك.</p>
                         </div>
                     </div>
                 </div>
             </div>
+            
+            <div class="relative">
+                <div class="premium-glass p-10 rounded-[3rem] neon-glow">
+                    <div class="font-mono text-[10px] space-y-4">
+                        <p class="text-gold opacity-50"># Initiating Secure Protocol...</p>
+                        <p class="text-white"><span class="text-green-500">✔</span> Local Database Detected (Main.db)</p>
+                        <p class="text-white"><span class="text-green-500">✔</span> AES-256 Key Handshake: OK</p>
+                        <p class="text-white"><span class="text-gold animate-pulse">⏳</span> Syncing to Remote Repository...</p>
+                        <div class="w-full bg-white/5 h-1 rounded-full overflow-hidden">
+                            <div class="bg-gold h-full w-[65%] shadow-[0_0_15px_var(--gold)]"></div>
+                        </div>
+                        <p class="text-gray-600 italic">// 1.2MB of 1.8MB Transferred</p>
+                    </div>
+                </div>
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-gold/10 blur-[50px] rounded-full"></div>
+            </div>
         </div>
-    </main>
+    </section>
 
-    <div id="winModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-6 bg-black/90 backdrop-blur-xl">
-        <div class="modal-content glass-premium max-w-md w-full p-10 border-gold/20 relative">
-            <h3 class="text-3xl font-bold mb-3 text-center">نسخة <span class="gold-text">Windows</span></h3>
-            <p class="text-gray-500 text-center text-sm mb-10 leading-relaxed">يرجى اختيار إصدار النظام الخاص بك لتحميل النسخة المتوافقة.</p>
+    <section id="features" class="py-32 bg-[#030303] relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-32">
+                <h3 class="text-xl font-bold font-mono tracking-[0.5em] uppercase opacity-30 mb-6">Capabilities</h3>
+                <h2 class="text-4xl lg:text-6xl font-black">لماذا يختار المحترفون <span class="gold-grad">DevHub؟</span></h2>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-10">
+                <div class="premium-glass p-12 rounded-[3rem] space-y-8">
+                    <i data-lucide="zap" class="w-12 h-12 text-gold"></i>
+                    <h4 class="text-2xl font-black">سرعة استجابة مذهلة</h4>
+                    <p class="text-gray-500 leading-relaxed">تم بناء النواة بلغة Rust لضمان استجابة فورية وحل التعارضات في أجزاء من الثانية.</p>
+                </div>
+                <div class="premium-glass p-12 rounded-[3rem] space-y-8 lg:translate-y-12">
+                    <i data-lucide="shield-alert" class="w-12 h-12 text-gold"></i>
+                    <h4 class="text-2xl font-black">أمان مجهول الهوية</h4>
+                    <p class="text-gray-500 leading-relaxed">نحن لا نملك خوادم وسيطة. بياناتك تنتقل من جهازك إلى GitHub مباشرة بخصوصية 100%.</p>
+                </div>
+                <div class="premium-glass p-12 rounded-[3rem] space-y-8">
+                    <i data-lucide="layers" class="w-12 h-12 text-gold"></i>
+                    <h4 class="text-2xl font-black">تعدد المنصات</h4>
+                    <p class="text-gray-500 leading-relaxed">ابدأ المزامنة من هاتفك وأكمل عملك من حاسوبك بسلاسة تامة وتزامن لحظي.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            <div class="grid gap-5">
-                <a href="" class="flex items-center justify-between p-6 rounded-2xl bg-white/5 border border-white/5 hover:border-gold/40 hover:bg-white/10 transition-all group">
-                    <div class="flex items-center gap-5">
-                        <i data-lucide="layout-grid" class="text-gold w-8 h-8"></i>
-                        <div class="text-right">
-                            <p class="font-bold text-lg leading-none mb-1">Windows 11</p>
-                            <p class="text-[10px] text-gray-500 uppercase font-mono">Latest Build | x64-ARM</p>
+    <section class="py-32 px-6 max-w-7xl mx-auto text-center">
+        <div class="premium-glass p-1 border-white/5 rounded-[4rem] overflow-hidden">
+            <div class="bg-black p-10 lg:p-24 rounded-[3.8rem] border border-white/5">
+                <h2 class="text-3xl lg:text-6xl font-black mb-10">جاهز لاقتحام <span class="gold-grad italic">المستقبل؟</span></h2>
+                <p class="text-gray-500 text-lg mb-16 max-w-2xl mx-auto">انضم إلى آلاف المطورين الذين وثقوا في DevHub لإدارة قواعد بياناتهم المشفرة.</p>
+                <div class="flex flex-wrap justify-center gap-12 opacity-30">
+                    <i data-lucide="github" class="w-12 h-12"></i>
+                    <i data-lucide="database" class="w-12 h-12"></i>
+                    <i data-lucide="command" class="w-12 h-12"></i>
+                    <i data-lucide="activity" class="w-12 h-12"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-20 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-10">
+            <div class="flex items-center gap-3">
+                <span class="text-xl font-black font-mono">DEVHUB</span>
+                <span class="text-[10px] text-gray-700 tracking-[0.5em] uppercase">Elite Ecosystem</span>
+            </div>
+            <div class="flex gap-10">
+                <a href="privacy.html" class="text-xs text-gray-500 hover:text-gold transition-colors">Privacy</a>
+                <a href="teams.html" class="text-xs text-gray-500 hover:text-gold transition-colors">Teams</a>
+                <a href="Docs.html" class="text-xs text-gray-500 hover:text-gold transition-colors">Docs</a>
+            </div>
+            <p class="text-[10px] text-gray-800 font-mono">© 2026 DECENTRALIZED PROTOCOL</p>
+        </div>
+    </footer>
+
+    <footer class="relative mt-32 border-t border-white/5 bg-[#020202] pt-20 pb-10 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/50 to-transparent opacity-20"></div>
+        
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-20">
+                
+                <div class="col-span-2 lg:col-span-2 space-y-6">
+                    <a href="index.html" class="flex items-center gap-3 group">
+                        <div class="w-10 h-10 bg-gold rounded-xl flex items-center justify-center transition-transform group-hover:rotate-12">
+                            <i data-lucide="terminal" class="text-black w-6 h-6"></i>
                         </div>
+                        <span class="text-2xl font-black font-mono tracking-tighter uppercase">Dev<span class="gold-grad text-[#FFD700]">Hub</span></span>
+                    </a>
+                    <p class="text-xs text-gray-500 leading-relaxed max-w-sm italic">
+                        أول بروتوكول مزامنة لا مركزي مشفر للمطورين. صُمم ليمنحك السيادة الكاملة على بياناتك البرمجية عبر نفق GitHub الآمن.
+                    </p>
+                    <div class="flex gap-4 opacity-40">
+                        <i data-lucide="github" class="w-5 h-5 hover:text-gold cursor-pointer transition-colors"></i>
+                        <i data-lucide="twitter" class="w-5 h-5 hover:text-gold cursor-pointer transition-colors"></i>
+                        <i data-lucide="discord" class="w-5 h-5 hover:text-gold cursor-pointer transition-colors"></i>
                     </div>
-                    <i data-lucide="download" class="w-5 h-5 text-gray-700 group-hover:text-gold transition-all"></i>
-                </a>
+                </div>
 
-                <a href="" class="flex items-center justify-between p-6 rounded-2xl bg-white/5 border border-white/5 hover:border-gold/40 hover:bg-white/10 transition-all group">
-                    <div class="flex items-center gap-5">
-                        <i data-lucide="monitor" class="text-gray-400 group-hover:text-gold w-8 h-8 transition-colors"></i>
-                        <div class="text-right">
-                            <p class="font-bold text-lg leading-none mb-1">Windows 10</p>
-                            <p class="text-[10px] text-gray-500 uppercase font-mono">Enterprise | Legacy x64</p>
-                        </div>
-                    </div>
-                    <i data-lucide="download" class="w-5 h-5 text-gray-700 group-hover:text-gold transition-all"></i>
-                </a>
+                <div class="space-y-6">
+                    <h5 class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.3em]">المنتج</h5>
+                    <ul class="space-y-4 text-xs font-medium">
+                        <li><a href="index.html" class="text-gray-400 hover:text-gold transition-colors">الرئيسية</a></li>
+                        <li><a href="download.html" class="text-gray-400 hover:text-gold transition-colors">التحميل المباشر</a></li>
+                        <li><a href="status.html" class="flex items-center gap-2 text-gray-400 hover:text-gold transition-colors">
+                            حالة النظام 
+                            <span class="w-1.5 h-1.5 bg-yellow-500 rounded-full animate-pulse"></span>
+                        </a></li>
+                    </ul>
+                </div>
+
+                <div class="space-y-6">
+                    <h5 class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.3em]">الموارد</h5>
+                    <ul class="space-y-4 text-xs font-medium">
+                        <li><a href="docs.html" class="text-gray-400 hover:text-gold transition-colors">الوثائق التقنية</a></li>
+                        <li><a href="teams.html" class="text-gray-400 hover:text-gold transition-colors">فريق العمل</a></li>
+                        <li><a href="privacy.html" class="text-gray-400 hover:text-gold transition-colors">سياسة الخصوصية</a></li>
+                    </ul>
+                </div>
+
             </div>
 
-            <button onclick="closeWinModal()" class="w-full mt-10 py-3 text-gray-600 hover:text-white text-xs font-bold uppercase tracking-widest transition-colors">
-                إغلاق النافذة
-            </button>
+            <div class="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-right">
+                <div class="flex items-center gap-4 order-2 md:order-1">
+                    <p class="text-[9px] font-bold text-gray-700 tracking-widest uppercase">© 2026 DECENTRALIZED PROTOCOL. ALL RIGHTS RESERVED.</p>
+                </div>
+                
+                <div class="flex items-center gap-6 order-1 md:order-2">
+                    <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/5 border border-green-500/10">
+                        <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                        <span class="text-[8px] font-black text-green-500 uppercase tracking-tighter">Global Nodes: Online</span>
+                    </div>
+                    <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-gold/5 border border-gold/10">
+                        <span class="text-[8px] font-black text-gold uppercase tracking-tighter italic">Version 1.0.4-Stable</span>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-
-    <footer class="py-20 border-t border-white/5 text-center relative z-10">
-        <p class="text-gray-600 text-[10px] font-bold tracking-[0.6em] uppercase">
-            Built for Elite Developers | Decentralized Identity © 2026
-        </p>
     </footer>
 
     <script>
         // تفعيل الأيقونات
         lucide.createIcons();
 
-        // دوال النافذة (Modal)
-        const modal = document.getElementById('winModal');
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
 
-        function openWinModal() {
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden'; // منع التمرير عند فتح النافذة
-        }
+        // أنيميشن الدخول
+        gsap.utils.toArray('.reveal').forEach((el, i) => {
+            gsap.from(el, {
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                delay: i * 0.2,
+                ease: "expo.out"
+            });
+        });
 
-        function closeWinModal() {
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
+        // تأثير الشبكة عند التمرير
+        gsap.to("#grid", {
+            scrollTrigger: {
+                trigger: "body",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 2
+            },
+            y: 300,
+            opacity: 0.1
+        });
 
-        // إغلاق عند الضغط خارج النافذة
-        window.onclick = function(event) {
-            if (event.target == modal) closeWinModal();
-        }
+        // تأثير الماوس البصري
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 40;
+            const y = (e.clientY / window.innerHeight - 0.5) * 40;
+            gsap.to(".premium-glass", {
+                duration: 2,
+                rotationY: x/2,
+                rotationX: -y/2,
+                ease: "power2.out"
+            });
+        });
+        // أضف هذا الكود في نهاية الـ Script لكل صفحة
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', e => {
+                if (link.href.includes('.html')) {
+                    e.preventDefault();
+                    gsap.to("body", { opacity: 0, duration: 0.5, onComplete: () => {
+                        window.location.href = link.href;
+                    }});
+                }
+            });
+        });
+        // عند تحميل الصفحة
+        window.addEventListener('load', () => {
+            gsap.from("body", { opacity: 0, duration: 1 });
+        });
     </script>
 </body>
 </html>
